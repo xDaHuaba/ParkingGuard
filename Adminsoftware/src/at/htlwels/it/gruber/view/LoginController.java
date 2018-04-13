@@ -6,8 +6,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 
 public class LoginController {
     @FXML
@@ -23,8 +25,10 @@ public class LoginController {
     private String username;
     private String password;
 
+    private String filename = "properties.ini";
+
     @FXML
-    public void handleConfirm(){
+    public void handleConfirm() throws IOException{
         ip = databaseIPField.getText();
         username = usernameField.getText();
         password = passwordField.getText();
@@ -44,8 +48,8 @@ public class LoginController {
     }
 
     public void saveProperties(String ip, String username, String password) throws IOException{
-        try(BufferedWriter bw = new BufferedWriter(new FileWriter("properties.ini"))){
-
+        new File(filename).delete();
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename))){
             bw.write(ip);
             bw.write(username);
             bw.write(password);
