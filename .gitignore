@@ -1,0 +1,8 @@
+
+*.class
+*.iml
+DBServer/.idea/workspace.xml
+DBServer/.idea/vcs.xml
+DBServer/.idea/modules.xml
+DBServer/.idea/misc.xml
+DBServer/.idea/.name
