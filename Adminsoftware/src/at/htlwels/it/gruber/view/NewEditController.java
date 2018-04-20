@@ -1,5 +1,6 @@
 package at.htlwels.it.gruber.view;
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -13,4 +14,10 @@ public class NewEditController {
     public TextField nachnamefield;
     public DatePicker parktvonpick;
     public DatePicker parktbispick;
+
+    public void speichern(ActionEvent actionEvent) {
+    }
+
+    public void abbrechen(ActionEvent actionEvent) {
+    }
 }
