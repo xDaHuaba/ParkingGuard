@@ -1,12 +1,12 @@
 package server;
 
 /**
- * Created by dahua on 13-Apr-18.
+ * Created by DaHuaba on 13-Apr-18.
  * Class: 4AHIT
  * Project: ParkingGuardDBServer
  */
-public class MainTest {
+public class Main {
 	public static void main(String[] args) {
-		System.out.println("lel");
+
 	}
 }
