@@ -1,5 +1,8 @@
 package server.web;
 
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSocket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -26,8 +29,10 @@ public class ConServer extends Thread {
 
 	private void buildConnectionToClient() {
 
-		try (	ServerSocket serverSocket = new ServerSocket(portNumber);
-				Socket clientSocket = serverSocket.accept()){
+		ServerSocketFactory factory = SSLServerSocketFactory.getDefault();
+
+		try (ServerSocket serverSocket = factory.createServerSocket(portNumber);
+			 Socket clientSocket = serverSocket.accept()){
 
 			serverThread.setClientSocket(clientSocket);
 			executorService.execute(serverThread);
