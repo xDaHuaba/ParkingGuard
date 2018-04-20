@@ -9,7 +9,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginController {
     @FXML
@@ -27,11 +28,34 @@ public class LoginController {
 
     private String filename = "properties.ini";
 
+    public LoginController() throws NoSuchAlgorithmException {
+    }
+
+    public String myMD5(String s) throws NoSuchAlgorithmException {
+        MessageDigest msg = MessageDigest.getInstance("MD5");
+        msg.update(s.getBytes());
+        return byteToHexInString(msg.digest());
+    }
+
+    private String myMD5() throws NoSuchAlgorithmException {
+        MessageDigest msg = MessageDigest.getInstance("MD5");
+        msg.update(passwordField.getText().getBytes());
+        return byteToHexInString(msg.digest());
+    }
+
+    private String byteToHexInString(byte[] bytes){
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X", b));
+        }
+        return sb.toString();
+    }
+
     @FXML
-    public void handleConfirm() throws IOException{
+    public void handleConfirm() throws IOException, NoSuchAlgorithmException {
         ip = databaseIPField.getText();
         username = usernameField.getText();
-        password = passwordField.getText();
+        password = myMD5();
 
         saveProperties(ip, username, password);
 
@@ -47,7 +71,7 @@ public class LoginController {
         dialogStage.close();
     }
 
-    public void saveProperties(String ip, String username, String password) throws IOException{
+    private void saveProperties(String ip, String username, String password) throws IOException{
         new File(filename).delete();
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename))){
             bw.write(ip);
