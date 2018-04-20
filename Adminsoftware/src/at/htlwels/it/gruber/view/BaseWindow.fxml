@@ -12,22 +12,21 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.htlwels.it.gruber.view.BaseWindowController">
    <center>
-      <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="totalCarsTable" editable="true" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="100.0" text="Kennzeichen" />
-          <TableColumn prefWidth="26.0" text="Nr." />
-            <TableColumn prefWidth="131.0" text="Nachname" />
-            <TableColumn prefWidth="143.0" text="Vorname" />
-            <TableColumn prefWidth="100.0" text="Von" />
-            <TableColumn prefWidth="100.0" text="Bis" />
+          <TableColumn fx:id="licenseCol" prefWidth="100.0" text="Kennzeichen" />
+            <TableColumn fx:id="lastNameCol" prefWidth="131.0" text="Nachname" />
+            <TableColumn fx:id="firstNameCol" prefWidth="143.0" text="Vorname" />
+            <TableColumn fx:id="startDateCol" prefWidth="100.0" text="Von" />
+            <TableColumn fx:id="endDateCol" prefWidth="100.0" text="Bis" />
         </columns>
       </TableView>
    </center>
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button mnemonicParsing="false" text="Neu" />
-            <Button mnemonicParsing="false" text="Bearbeiten" />
+          <Button fx:id="newButton" mnemonicParsing="false" onAction="#addContent" text="Neu" />
+            <Button fx:id="editButton" mnemonicParsing="false" onAction="#editContent" text="Bearbeiten" />
         </buttons>
          <BorderPane.margin>
             <Insets right="10.0" />
