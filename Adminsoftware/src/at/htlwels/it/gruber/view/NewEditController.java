@@ -1,5 +1,6 @@
 package at.htlwels.it.gruber.view;
 
+<<<<<<< HEAD
 import at.htlwels.it.gruber.model.DataBaseEntry;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -65,5 +66,26 @@ public class NewEditController {
     public void setEntry(DataBaseEntry entry){
         this.entry = entry;
         init();
+=======
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+
+public class NewEditController {
+    public Button speichern;
+    public Button abbrechen;
+    public TextField kennzeichenfield;
+    public TextField vornamenfield;
+    public TextField nachnamefield;
+    public DatePicker parktvonpick;
+    public DatePicker parktbispick;
+
+    public void speichern(ActionEvent actionEvent) {
+    }
+
+    public void abbrechen(ActionEvent actionEvent) {
+>>>>>>> 2b890effdb65946c8473c8fd17c9d8d1028fddf8
     }
 }
