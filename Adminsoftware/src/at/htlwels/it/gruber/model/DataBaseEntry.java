@@ -7,11 +7,18 @@ import java.time.LocalDate;
 
 public class DataBaseEntry {
     private StringProperty license;
-//    private int plot_no;
     private StringProperty lastname;
     private StringProperty firstname;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    public DataBaseEntry(){
+        this.license = new SimpleStringProperty("");
+        this.lastname = new SimpleStringProperty("");
+        this.firstname = new SimpleStringProperty("");
+        this.startDate = LocalDate.now();
+        this.endDate = LocalDate.now();
+    }
 
     public DataBaseEntry(String license, /*int plot_no,*/ String lastname, String firstname, LocalDate startDate, LocalDate endDate) {
         this.license = new SimpleStringProperty(license);
@@ -60,5 +67,14 @@ public class DataBaseEntry {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof DataBaseEntry)) return false;
+        else{
+            DataBaseEntry other = (DataBaseEntry)obj;
+            return other.getLicense().matches(this.getLicense());
+        }
     }
 }

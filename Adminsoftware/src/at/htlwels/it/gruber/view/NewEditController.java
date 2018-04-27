@@ -1,14 +1,11 @@
 package at.htlwels.it.gruber.view;
 
-<<<<<<< HEAD
 import at.htlwels.it.gruber.model.DataBaseEntry;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.time.LocalDate;
 
 public class NewEditController {
     @FXML
@@ -25,22 +22,31 @@ public class NewEditController {
     private DatePicker startDatePicker;
     @FXML
     private DatePicker endDatePicker;
-    
+
     private Stage dialogStage;
     private DataBaseEntry entry;
+    public static boolean cancelled = false;
 
     @FXML
     public void saveChanges() {
-
+        if(valid()){
+            entry.setLicense(licenseField.getText());
+            entry.setFirstname(firstnameField.getText());
+            entry.setLastname(lastnameField.getText());
+            entry.setStartDate(startDatePicker.getValue());
+            entry.setEndDate(endDatePicker.getValue());
+            dialogStage.close();
+        }
     }
 
     @FXML
     public void cancel() {
+        cancelled = true;
         dialogStage.close();
     }
 
-    public void init(){
-        if(entry!=null){
+    private void init() {
+        if (entry != null) {
             licenseField.setText(entry.getLicense());
             firstnameField.setText(entry.getFirstname());
             lastnameField.setText(entry.getLastname());
@@ -49,13 +55,13 @@ public class NewEditController {
         }
     }
 
-    public boolean valid(){
+    private boolean valid() {
         boolean valid = true;
-        if(licenseField.getText().isEmpty()) valid = false;
-        else if(firstnameField.getText().isEmpty()) valid = false;
-        else if(lastnameField.getText().isEmpty()) valid = false;
-        else if(startDatePicker.getValue()==null) valid = false;
-        else if(endDatePicker.getValue()==null) valid = false;
+        if (licenseField.getText().isEmpty()) valid = false;
+        else if (firstnameField.getText().isEmpty()) valid = false;
+        else if (lastnameField.getText().isEmpty()) valid = false;
+//        else if (startDatePicker.getValue() == null) valid = false;
+//        else if (endDatePicker.getValue() == null) valid = false;
         return valid;
     }
 
@@ -63,29 +69,8 @@ public class NewEditController {
         this.dialogStage = dialogStage;
     }
 
-    public void setEntry(DataBaseEntry entry){
+    public void setEntry(DataBaseEntry entry) {
         this.entry = entry;
         init();
-=======
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
-public class NewEditController {
-    public Button speichern;
-    public Button abbrechen;
-    public TextField kennzeichenfield;
-    public TextField vornamenfield;
-    public TextField nachnamefield;
-    public DatePicker parktvonpick;
-    public DatePicker parktbispick;
-
-    public void speichern(ActionEvent actionEvent) {
-    }
-
-    public void abbrechen(ActionEvent actionEvent) {
->>>>>>> 2b890effdb65946c8473c8fd17c9d8d1028fddf8
     }
 }

@@ -50,41 +50,11 @@ public class LoginController {
         return sb.toString();
     }
 
-    public LoginController() throws NoSuchAlgorithmException {
-    }
-
-    public String myMD5(String s) throws NoSuchAlgorithmException {
-        MessageDigest msg = MessageDigest.getInstance("MD5");
-        msg.update(s.getBytes());
-        return byteToHexInString(msg.digest());
-    }
-
-    private String myMD5() throws NoSuchAlgorithmException {
-        MessageDigest msg = MessageDigest.getInstance("MD5");
-        msg.update(passwordField.getText().getBytes());
-        return byteToHexInString(msg.digest());
-    }
-
-    private String byteToHexInString(byte[] bytes){
-        StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02X", b));
-        }
-        return sb.toString();
-    }
-
     @FXML
-<<<<<<< HEAD
-    public void handleConfirm() throws IOException, NoSuchAlgorithmException{
-        ip = databaseIPField.getText();
-        username = usernameField.getText();
-        password = encryptPasswordMD5();
-=======
     public void handleConfirm() throws IOException, NoSuchAlgorithmException {
         ip = databaseIPField.getText();
         username = usernameField.getText();
-        password = myMD5();
->>>>>>> 2b890effdb65946c8473c8fd17c9d8d1028fddf8
+        password = encryptPasswordMD5();
 
         saveProperties(ip, username, password);
 
@@ -101,10 +71,6 @@ public class LoginController {
     }
 
     private void saveProperties(String ip, String username, String password) throws IOException{
-<<<<<<< HEAD
-=======
-        new File(filename).delete();
->>>>>>> 2b890effdb65946c8473c8fd17c9d8d1028fddf8
         try(BufferedWriter bw = new BufferedWriter(new FileWriter(filename))){
             bw.write(ip);bw.newLine();
             bw.write(username);bw.newLine();
