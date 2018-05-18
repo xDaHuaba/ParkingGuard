@@ -6,4 +6,9 @@ package server.db;
  * Project: ParkingGuardDBServer
  */
 public class DBConnect {
+//	public int checkLogin(String username, String password){
+//
+//	}
+
+
 }
