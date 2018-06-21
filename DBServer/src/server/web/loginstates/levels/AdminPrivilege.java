@@ -16,39 +16,45 @@ import java.sql.SQLException;
 public class AdminPrivilege extends AbstractCommands {
 	private DBConnect dbConnect;
 
+	private int level=1;
+
+	public int getLevel() {
+		return level;
+	}
+
 	public AdminPrivilege(DBConnect dbConnect) {
 		this.dbConnect = dbConnect;
 	}
 
 	@Override
-	public boolean check(String numberplate) throws SQLException {
+	public boolean check(String numberplate){
 		return dbConnect.check(numberplate);
 	}
 
 	@Override
-	public UserLevel login(String username, String password) throws SQLException {
+	public UserLevel login(String username, String password) {
 		return dbConnect.login(username, password);
 	}
 
 
 
 	@Override
-	public int addEntry(String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate) throws SQLException {
-		return dbConnect.addEntry(firstname, lastname, phonenumber, startDate, endDate, numberplate);
+	public int addEntry(String firstname, String lastname, Date startDate, Date endDate, String numberplate){
+		return dbConnect.addEntry(firstname, lastname, startDate, endDate, numberplate);
 	}
 
 	@Override
-	public boolean changeEntry(int personid, String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate) throws SQLException {
-		return dbConnect.changeEntry(personid, firstname, lastname, phonenumber, startDate, endDate, numberplate);
+	public boolean changeEntry(int personid, String firstname, String lastname, Date startDate, Date endDate, String numberplate){
+		return dbConnect.changeEntry(personid, firstname, lastname, startDate, endDate, numberplate);
 	}
 
 	@Override
-	public boolean deleteEntry(int personid) throws SQLException {
+	public boolean deleteEntry(int personid) {
 		return dbConnect.deleteEntry(personid);
 	}
 
 	@Override
-	public String[] viewEntries() throws PrivilegeException, SQLException {
-		return super.viewEntries();
+	public String[] viewEntries() {
+		return dbConnect.viewEntries();
 	}
 }

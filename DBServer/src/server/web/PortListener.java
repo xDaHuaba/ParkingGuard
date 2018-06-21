@@ -1,14 +1,17 @@
 package server.web;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.sun.security.ntlm.Server;
 
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
+import java.beans.PropertyVetoException;
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,6 +27,7 @@ public class PortListener {
 	private boolean serverRunning = true;
 
 	private ExecutorService executorService = Executors.newFixedThreadPool(50);
+	ComboPooledDataSource cpds = new ComboPooledDataSource();
 
 	/**
 	 * Start Server
@@ -36,6 +40,8 @@ public class PortListener {
 		try (ServerSocket serverSocket = new ServerSocket(port)){
 
 			System.out.println(debugheader+"Starting Server on "+serverSocket.getLocalSocketAddress());
+			initJDBC();
+
 
 			//While server is running
 			while(serverRunning) {
@@ -43,7 +49,7 @@ public class PortListener {
 				try {
 
 					//Accepting new Client
-					executorService.execute(new ClientHandler(serverSocket.accept()));
+					executorService.execute(new ClientHandler(serverSocket.accept(), cpds.getConnection()));
 
 				} catch(IOException ioe) {	//Error while accepting remote socket
 					System.out.println(debugheader+"[Error] accepting remote connection failed");
@@ -55,6 +61,26 @@ public class PortListener {
 			System.out.println(debugheader+"[Error] Starting Server on port "+port+" failed");
 			e.printStackTrace();
 			return -1;
+		} catch (SQLException e) {
+			System.out.println(debugheader+"[Error] SQL Connection failed");
+			e.printStackTrace();
+			return -1;
 		}
 	}
+
+	private void initJDBC(){
+		try {
+			cpds.setDriverClass( "org.postgresql.Driver" );
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		}
+		cpds.setJdbcUrl( "jdbc:postgresql://192.168.1.1:5432/ParkingGuard" );
+		cpds.setUser("superuser");
+		cpds.setPassword("PC#sql8");
+
+		cpds.setMinPoolSize(5);
+		cpds.setAcquireIncrement(5);
+		cpds.setMaxPoolSize(20);
+	}
+
 }

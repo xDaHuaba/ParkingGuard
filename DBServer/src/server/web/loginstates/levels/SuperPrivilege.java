@@ -21,27 +21,27 @@ public class SuperPrivilege extends AbstractCommands {
 	}
 
 	@Override
-	public boolean check(String numberplate) throws PrivilegeException, SQLException {
+	public boolean check(String numberplate) throws PrivilegeException {
 		return super.check(numberplate);
 	}
 
 	@Override
-	public UserLevel login(String username, String password) throws PrivilegeException, SQLException {
+	public UserLevel login(String username, String password) throws PrivilegeException {
 		return super.login(username, password);
 	}
 
 	@Override
-	public int addEntry(String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate) throws PrivilegeException, SQLException {
-		return super.addEntry(firstname, lastname, phonenumber, startDate, endDate, numberplate);
+	public int addEntry(String firstname, String lastname, Date startDate, Date endDate, String numberplate) throws PrivilegeException {
+		return super.addEntry(firstname, lastname, startDate, endDate, numberplate);
 	}
 
 	@Override
-	public boolean changeEntry(int personid, String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate) throws PrivilegeException, SQLException {
-		return super.changeEntry(personid, firstname, lastname, phonenumber, startDate, endDate, numberplate);
+	public boolean changeEntry(int personid, String firstname, String lastname, Date startDate, Date endDate, String numberplate) throws PrivilegeException {
+		return super.changeEntry(personid, firstname, lastname, startDate, endDate, numberplate);
 	}
 
 	@Override
-	public boolean deleteEntry(int personid) throws PrivilegeException, SQLException {
+	public boolean deleteEntry(int personid) throws PrivilegeException {
 		return super.deleteEntry(personid);
 	}
 

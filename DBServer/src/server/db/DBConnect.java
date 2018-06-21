@@ -24,30 +24,25 @@ public class DBConnect implements AutoCloseable {
 	//		SELECT * FROM person where numberplate like 'AWL5678'
 
 	private CallableStatement checkStatement;
-	private PreparedStatement loginStatement;
-	private PreparedStatement addEntry;
-	private PreparedStatement changeEntry;
-	private PreparedStatement deleteEntry;
+	private CallableStatement loginStatement;
+	private CallableStatement addEntry;
+	private CallableStatement changeEntry;
+	private CallableStatement deleteEntry;
 	private PreparedStatement viewEntries;
 	private PreparedStatement addAdmin;
 	private PreparedStatement changeAdmin;
 	private PreparedStatement deleteAdmin;
 
 
-	public DBConnect() throws SQLException {
-		String url = "jdbc:postgresql://localhost/test";
-		Properties props = new Properties();
-		props.setProperty("user", "dbAdmin");
-		props.setProperty("password", "PC#dbAdmin");
-//		props.setProperty("ssl","true");
-		this.conn = DriverManager.getConnection(url, props);
+	public DBConnect(Connection connection) throws SQLException {
+		this.conn = connection;
 
-		this.checkStatement = conn.prepareCall("{call parkingguarddb.checknumberplate(?)}");
-		this.loginStatement = conn.prepareStatement("{call parkingguarddb.login(?,?)}");
-		this.addEntry = conn.prepareStatement("{call parkingguarddb.addentry( ?, ?, ?, ?, ?, ?)}");
-		this.changeEntry = conn.prepareStatement("{call parkingguarddb.changeentry( ?, ?, ?, ?, ?, ?, ?)}");
-		this.deleteEntry = conn.prepareStatement("{call parkingguarddb.deleteentry(?)}");
-		this.viewEntries = conn.prepareStatement("SELECT * FROM parkingguarddb.person");
+		this.checkStatement = conn.prepareCall("{ ? = call parkingguarddb.checknumberplate(?)}");
+		this.loginStatement = conn.prepareCall("{ ? = call parkingguarddb.login(?,?)}");
+		this.addEntry = conn.prepareCall("{ ? = call parkingguarddb.addentry( ?, ?, ?, ?, ?, ?)}");
+		this.changeEntry = conn.prepareCall("{ ? = call parkingguarddb.changeentry( ?, ?, ?, ?, ?, ?, ?)}");
+		this.deleteEntry = conn.prepareCall(" { ? = call parkingguarddb.deleteentry(?)}");
+		this.viewEntries = conn.prepareStatement("SELECT personid, numberplate, lastname, firstname, startdate, enddate FROM parkingguarddb.person");
 		this.addAdmin = conn.prepareStatement("");
 		this.changeAdmin = conn.prepareStatement("");
 		this.deleteAdmin = conn.prepareStatement("");
@@ -62,10 +57,17 @@ public class DBConnect implements AutoCloseable {
 	 * @return If numberplate is valid to park return true, else false.
 	 * @throws SQLException Throws SQLException if something went wrong with database.
 	 */
-	public boolean check(String numberplate) throws SQLException {
-		checkStatement.setString(1, numberplate);
-		ResultSet resultSet = checkStatement.executeQuery();
-		return resultSet.first();
+	public boolean check(String numberplate){
+		try {
+			checkStatement.registerOutParameter(1, Types.BOOLEAN);
+			checkStatement.setString(2, numberplate);
+			checkStatement.execute();
+
+			return checkStatement.getBoolean(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	/**
@@ -76,12 +78,21 @@ public class DBConnect implements AutoCloseable {
 	 * @return Returns the privilege level of the user. Returns -1 if user/password is wrong
 	 * @throws SQLException Throws SQLException if something went wrong with database.
 	 */
-	public UserLevel login(String username, String password) throws SQLException {
-		checkStatement.setString(1, username);
-		checkStatement.setString(2, password);
-		ResultSet resultSet = loginStatement.executeQuery();
-		int userlevelint = resultSet.getInt(1);
-		return UserLevel.values()[userlevelint];
+	public UserLevel login(String username, String password){
+		try {
+			loginStatement.registerOutParameter(1, Types.INTEGER);
+			loginStatement.setString(2, username);
+			loginStatement.setString(3, password);
+//			System.out.println(loginStatement);
+
+			loginStatement.execute();
+
+			int userlevelint = loginStatement.getInt(1);
+			return UserLevel.values()[userlevelint];
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return UserLevel.Viewer;
+		}
 	}
 
 	/**
@@ -89,22 +100,23 @@ public class DBConnect implements AutoCloseable {
 	 *
 	 * @param firstname   First name
 	 * @param lastname    Last name
-	 * @param phonenumber phone number
 	 * @param startDate   Starting date of numberplate validation
 	 * @param endDate     End date of numberplate validation
 	 * @param numberplate Numberplate
 	 * @return Returns the UserID or -1 if something failed during creation
 	 */
-	public int addEntry(String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate){
+	public int addEntry(String firstname, String lastname, Date startDate, Date endDate, String numberplate){
 		try {
-			addEntry.setString(1, firstname);
-			addEntry.setString(2, lastname);
-			addEntry.setString(3, phonenumber);
-			addEntry.setDate(4, startDate);
-			addEntry.setDate(5, endDate);
-			addEntry.setString(6, numberplate);
-			ResultSet resultSet = addEntry.executeQuery();
-			return resultSet.getInt(1);
+			addEntry.registerOutParameter(1,Types.INTEGER);
+			addEntry.setString(2, firstname);
+			addEntry.setString(3, lastname);
+			addEntry.setString(4, "");
+			addEntry.setDate(5, startDate);
+			addEntry.setDate(6, endDate);
+			addEntry.setString(7, numberplate);
+
+			addEntry.execute();
+			return addEntry.getInt(1);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -126,23 +138,24 @@ public class DBConnect implements AutoCloseable {
 	 * @param personid    The identifier for entry, which is going to the updated
 	 * @param firstname   First name
 	 * @param lastname    Last name
-	 * @param phonenumber phone number
 	 * @param startDate   Starting date of numberplate validation
 	 * @param endDate     End date of numberplate validation
 	 * @param numberplate Numberplate
 	 * @return Returns true if update changes were successful
 	 */
-	public boolean changeEntry(int personid, String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate){
+	public boolean changeEntry(int personid, String firstname, String lastname, Date startDate, Date endDate, String numberplate){
 		try {
-			addEntry.setInt(1, personid);
-			addEntry.setString(2, firstname);
-			addEntry.setString(3, lastname);
-			addEntry.setString(4, phonenumber);
-			addEntry.setDate(5, startDate);
-			addEntry.setDate(6, endDate);
-			addEntry.setString(7, numberplate);
-			ResultSet resultSet = addEntry.executeQuery();
-			return resultSet.getBoolean(1);
+			changeEntry.registerOutParameter(1,Types.BOOLEAN);
+			changeEntry.setInt(2, personid);
+			changeEntry.setString(3, firstname);
+			changeEntry.setString(4, lastname);
+			changeEntry.setString(5, "");
+			changeEntry.setDate(6, startDate);
+			changeEntry.setDate(7, endDate);
+			changeEntry.setString(8, numberplate);
+			changeEntry.execute();
+
+			return changeEntry.getBoolean(1);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -165,9 +178,11 @@ public class DBConnect implements AutoCloseable {
 	 */
 	public boolean deleteEntry(int personid){
 		try {
-			addEntry.setInt(1, personid);
-			ResultSet resultSet = addEntry.executeQuery();
-			return resultSet.getBoolean(1);
+			deleteEntry.registerOutParameter(1,Types.BOOLEAN);
+			deleteEntry.setInt(2, personid);
+			deleteEntry.execute();
+
+			return deleteEntry.getBoolean(1);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -187,13 +202,35 @@ public class DBConnect implements AutoCloseable {
 	 *
 	 * @return
 	 */
-	public String[] viewEntries() throws SQLException {
-		ResultSet resultSet = viewEntries.executeQuery();
-		LinkedList<String> stringLinkedList = new LinkedList<>();
-		while (resultSet.next()){
+	public String[] viewEntries() {
+		try {
+			ResultSet resultSet = viewEntries.executeQuery();
+			LinkedList<String> stringLinkedList = new LinkedList<>();
 
+			//Running through resultSet
+			while (resultSet.next()){
+				StringBuilder sb = new StringBuilder();
+				//Getting colum metadata
+				ResultSetMetaData rsmd = resultSet.getMetaData();
+				int numberOfColumns = rsmd.getColumnCount();
 
-
+				//running through columns
+				for (int i = 1; i <= numberOfColumns; i++) {
+					//Adding cell to the string of the row
+					sb.append(resultSet.getString(i));
+					//If not last item, add a colon
+					if (i < numberOfColumns) {
+						sb.append(",");
+					}
+				}
+				//Adding row to list
+				stringLinkedList.add(sb.toString());
+			}
+			//Converting list to array and returning it
+			return  stringLinkedList.toArray(new String[stringLinkedList.size()]);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

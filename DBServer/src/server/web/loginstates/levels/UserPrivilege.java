@@ -15,21 +15,25 @@ import java.sql.SQLException;
 public class UserPrivilege extends AbstractCommands {
 	private DBConnect dbConnect;
 
+	private int level=0;
+
+	public int getLevel() {
+		return level;
+	}
+
 	public UserPrivilege(DBConnect dbConnect) {
 		this.dbConnect = dbConnect;
 	}
 
 	@Override
-	public boolean check(String numberplate) throws SQLException {
+	public boolean check(String numberplate) {
 		return dbConnect.check(numberplate);
 	}
 
 	@Override
 	public UserLevel login(String username, String password) throws PrivilegeException {
-		try {
+
 			return dbConnect.login(username, password);
-		} catch (SQLException e) {
-			return null;
-		}
+
 	}
 }

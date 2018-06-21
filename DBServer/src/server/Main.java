@@ -11,7 +11,14 @@ import java.net.InetAddress;
  */
 public class Main {
 	public static void main(String[] args) {
-		PortListener portListener=new PortListener();
-		portListener.serverloop();
+		try {
+			Class.forName("org.postgresql.Driver");
+			PortListener portListener=new PortListener();
+			portListener.serverloop();
+		} catch(ClassNotFoundException e) {
+			System.out.println("is ned do");
+		}
+
+
 	}
 }
