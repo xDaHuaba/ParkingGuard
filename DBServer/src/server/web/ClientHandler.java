@@ -27,12 +27,15 @@ public class ClientHandler implements Runnable {
 
 		try (PrintWriter out = new PrintWriter(socket.getOutputStream());
 			 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
 			String cmd;
 
 			while (clientRunning){
 				System.out.println(debugheader+"Waiting for cmd");
 				cmd = in.readLine();
+				System.out.println(debugheader+"Client:\t"+cmd);
 
+				handleCmd(cmd);
 
 			}
 
@@ -45,6 +48,30 @@ public class ClientHandler implements Runnable {
 			} catch (IOException ioe) {
 				System.out.println(debugheader+"[Error] closing client connection failed");
 			}
+		}
+	}
+
+	private void handleCmd(String cmd){
+		String[] elems = cmd.split(" ");
+		if (elems[0].toLowerCase().equals("login")){
+			System.out.println("Login "+elems[1]+elems[2]);
+
+
+		} else if (elems[0].toLowerCase().equals("check")){
+			System.out.println("Check "+elems[1]);
+
+
+		} else if (elems[0].toLowerCase().equals("addentry")){
+			System.out.println("AddEntry "+elems[1]+elems[2]+elems[3]+elems[4]+elems[5]+elems[6]);
+
+
+		} else if (elems[0].toLowerCase().equals("changeentry")){
+			System.out.println("ChangeEntry "+elems[1]+elems[2]+elems[3]+elems[4]+elems[5]+elems[6]+elems[7]);
+
+
+		} else if (elems[0].toLowerCase().equals("deleteentry")){
+			System.out.println("DeleteEntry "+elems[1]);
+
 		}
 	}
 }

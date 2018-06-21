@@ -1,8 +1,11 @@
 package server.web;
 
+import com.sun.security.ntlm.Server;
+
 import javax.net.ServerSocketFactory;
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,12 +32,10 @@ public class PortListener {
 	 */
 	public int serverloop() {
 
-		ServerSocketFactory serverSocketFactory = SSLServerSocketFactory.getDefault();
-
 		//Creating SLL Server socket
-		try (ServerSocket serverSocket = serverSocketFactory.createServerSocket(port)){
+		try (ServerSocket serverSocket = new ServerSocket(port)){
 
-			System.out.println(debugheader+"Starting Server on "+serverSocket.getInetAddress());
+			System.out.println(debugheader+"Starting Server on "+serverSocket.getLocalSocketAddress());
 
 			//While server is running
 			while(serverRunning) {

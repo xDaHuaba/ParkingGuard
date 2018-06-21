@@ -2,7 +2,8 @@ package server.web.loginstates;
 
 import server.web.UserLevel;
 
-import java.time.LocalDate;
+import java.sql.Date;
+import java.sql.SQLException;
 
 /**
  * Created by dahua on 27-Apr-18.
@@ -12,40 +13,44 @@ import java.time.LocalDate;
 public class AbstractCommands {
 	//----- Viewercommands
 
-	public boolean check(String numberplate) throws PrivilegeException {
+	public boolean check(String numberplate) throws PrivilegeException, SQLException {
 		throw new PrivilegeException("Not enough permissions to run the command \"check\"");
 	}
 
-	public UserLevel login(String username, String password) throws PrivilegeException {
+	public UserLevel login(String username, String password) throws PrivilegeException, SQLException  {
 		throw new PrivilegeException("Not enough permissions to run the command \"login\"");
 	}
 
 	//----- Admincommands
 
-	public int addEntry(String firstname, String lastname, String phonenumber, LocalDate startDate, LocalDate endDate) throws PrivilegeException  {
+	public int addEntry(String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate) throws PrivilegeException, SQLException   {
 		throw new PrivilegeException("Not enough permissions to run the command \"addEntry\"");
 	}
 
-	public boolean changeEntry(int personid, String firstname, String lastname, String phonenumber, LocalDate startDate, LocalDate endDate) throws PrivilegeException  {
+	public boolean changeEntry(int personid, String firstname, String lastname, String phonenumber, Date startDate, Date endDate, String numberplate) throws PrivilegeException, SQLException  {
 		throw new PrivilegeException("Not enough permissions to run the command \"changeEntry\"");
 	}
 
-	public boolean deleteEntry(int personid) throws PrivilegeException  {
+	public boolean deleteEntry(int personid) throws PrivilegeException, SQLException   {
+		throw new PrivilegeException("Not enough permissions to run the command \"deleteEntry\"");
+	}
+
+	public String[] viewEntries() throws PrivilegeException, SQLException   {
 		throw new PrivilegeException("Not enough permissions to run the command \"deleteEntry\"");
 	}
 
 
 	//------- Superusercommands
 
-	public boolean addAdmin(String username, String password) throws PrivilegeException  {
+	public boolean addAdmin(String username, String password) throws PrivilegeException , SQLException  {
 		throw new PrivilegeException("Not enough permissions to run the command \"addAdmin\"");
 	}
 
-	public boolean changeAdmin(int userid, String username, String password)  throws PrivilegeException {
+	public boolean changeAdmin(int userid, String username, String password)  throws PrivilegeException , SQLException {
 		throw new PrivilegeException("Not enough permissions to run the command \"changeAdmin\"");
 	}
 
-	public boolean deleteAdmin(int userid) throws PrivilegeException  {
+	public boolean deleteAdmin(int userid) throws PrivilegeException , SQLException  {
 		throw new PrivilegeException("Not enough permissions to run the command \"deleteAdmin\"");
 	}
 }
