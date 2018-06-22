@@ -5,7 +5,6 @@ import server.web.UserLevel;
 import server.web.loginstates.AbstractCommands;
 import server.web.loginstates.PrivilegeException;
 
-import java.sql.SQLException;
 
 /**
  * Created by dahua on 25-May-18.

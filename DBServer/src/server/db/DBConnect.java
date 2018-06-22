@@ -1,16 +1,9 @@
 package server.db;
 
 import server.web.UserLevel;
-import server.web.loginstates.AbstractCommands;
-import server.web.loginstates.PrivilegeException;
-import server.web.loginstates.levels.AdminPrivilege;
-import server.web.loginstates.levels.SuperPrivilege;
-import server.web.loginstates.levels.UserPrivilege;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.LinkedList;
-import java.util.Properties;
 
 /**
  * Created by dahua on 13-Apr-18.

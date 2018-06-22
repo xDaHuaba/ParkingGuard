@@ -2,7 +2,6 @@ package server;
 
 import server.web.PortListener;
 
-import java.net.InetAddress;
 
 /**
  * Created by DaHuaba on 13-Apr-18.
